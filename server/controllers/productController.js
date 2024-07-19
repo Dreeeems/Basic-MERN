@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const { sendMessage } = require("../ws/ws");
 
 exports.getProducts = async (req, res) => {
   try {
@@ -6,6 +7,17 @@ exports.getProducts = async (req, res) => {
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+wsSendProducts = async (req, res) => {
+  try {
+    const products = await Product.find().sort({ date: -1 });
+    console.log(products);
+    const message = JSON.stringify(products);
+    sendMessage(message);
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -34,6 +46,7 @@ exports.addProduct = async (req, res) => {
   try {
     const product = await newProduct.save();
     res.status(201).json(product);
+    wsSendProducts();
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -50,6 +63,7 @@ exports.updateProduct = async (req, res) => {
       { new: true, runValidators: true }
     );
     res.json(updatedProduct);
+    wsSendProducts();
   } catch (err) {
     console.error("Error updating product:", err);
     res.status(500).json({ message: err.message });
@@ -62,6 +76,7 @@ exports.deleteProduct = async (req, res) => {
     if (!product) return res.status(404).json({ message: "Product not found" });
     await product.deleteOne({ _id: req.params.id });
     res.json({ message: "Product removed" });
+    wsSendProducts();
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

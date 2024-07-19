@@ -1,12 +1,15 @@
 const express = require("express");
+const http = require("http");
 const cors = require("cors");
 const routes = require("./routes/routes");
 const connectionDB = require("./database/db");
+const dotenv = require("dotenv");
+const { createWebSocketServer, sendMessage } = require("./ws/ws");
+dotenv.config();
 const app = express();
 const port = 3000;
-const dotenv = require("dotenv");
-dotenv.config();
-connectionDB();
+const server = http.createServer(app);
+const wss = createWebSocketServer(server);
 
 app.use(express.json());
 app.use(cors());
@@ -15,6 +18,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+connectionDB();
+
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
