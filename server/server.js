@@ -4,7 +4,7 @@ const cors = require("cors");
 const routes = require("./routes/routes");
 const connectionDB = require("./database/db");
 const dotenv = require("dotenv");
-const { createWebSocketServer, sendMessage } = require("./ws/ws");
+const { createWebSocketServer } = require("./ws/ws");
 dotenv.config();
 const app = express();
 const port = 3010;
