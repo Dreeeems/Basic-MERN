@@ -1,3 +1,4 @@
+//WebSocket Implementation
 const WebSocket = require("ws");
 let wss;
 
@@ -6,7 +7,6 @@ const createWebSocketServer = (httpServer) => {
 
   wss.on("connection", (ws) => {
     console.log("WebSocket connection established");
-    console.log(ws.clients);
 
     ws.on("message", (message) => {
       console.log("Received message:", message);
@@ -15,7 +15,6 @@ const createWebSocketServer = (httpServer) => {
 
     ws.on("error", (error) => {
       console.error("WebSocket error:", error);
-      console.log(ws.clients);
     });
 
     ws.on("close", () => {

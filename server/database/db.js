@@ -1,3 +1,5 @@
+//DB connection using a .env File
+
 const mongoose = require("mongoose");
 
 const connectionDB = async () => {

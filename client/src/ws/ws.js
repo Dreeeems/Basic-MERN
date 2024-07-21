@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { fetchFromApi } from "../util/fetchFromApi";
 
 const useWebSocket = (url) => {
   const [message, setMessage] = useState(null);
@@ -7,16 +8,17 @@ const useWebSocket = (url) => {
 
   useEffect(() => {
     ws.current = new WebSocket(url);
-
-    ws.current.onopen = () => {
+    ws.current.onopen = async () => {
+      const data = await fetchFromApi();
+      setMessage(data);
       console.log("WebSocket connection opened");
+
       setIsConnected(true);
     };
 
     ws.current.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
       setMessage(parsedData);
-      console.log(message);
     };
 
     ws.current.onerror = (error) => {

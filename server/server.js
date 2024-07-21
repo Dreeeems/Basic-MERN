@@ -7,16 +7,13 @@ const dotenv = require("dotenv");
 const { createWebSocketServer, sendMessage } = require("./ws/ws");
 dotenv.config();
 const app = express();
-const port = 3000;
+const port = 3010;
 const server = http.createServer(app);
 const wss = createWebSocketServer(server);
 
 app.use(express.json());
 app.use(cors());
 app.use("/api", routes);
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 connectionDB();
 

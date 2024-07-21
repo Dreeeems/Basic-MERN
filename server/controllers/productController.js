@@ -1,3 +1,4 @@
+// Whole item controller
 const Product = require("../models/productModel");
 const { sendMessage } = require("../ws/ws");
 
@@ -13,7 +14,6 @@ exports.getProducts = async (req, res) => {
 wsSendProducts = async (req, res) => {
   try {
     const products = await Product.find().sort({ date: -1 });
-    console.log(products);
     const message = JSON.stringify(products);
     sendMessage(message);
   } catch (err) {
@@ -54,15 +54,18 @@ exports.addProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const newData = req.body;
+  console.log(newData);
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
+    console.log(newData);
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       newData,
       { new: true, runValidators: true }
     );
     res.json(updatedProduct);
+    console.log(updatedProduct);
     wsSendProducts();
   } catch (err) {
     console.error("Error updating product:", err);

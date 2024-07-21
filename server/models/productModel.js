@@ -1,3 +1,12 @@
+/*Mongo Model for item
+name : String
+type : String
+Price : Number
+Rating : Number
+Warranty_years : Number
+available : Boolean
+*/
+
 const mongoose = require("mongoose");
 
 const ProductSchema = new mongoose.Schema({
